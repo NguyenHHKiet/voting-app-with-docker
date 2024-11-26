@@ -1,0 +1,25 @@
+services:
+  redis:
+    image: redis
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  vote:
+    image: voting-app
+    ports:
+      - 5000:80
+    links:
+      - redis
+  workers:
+    image: worker-app
+    links:
+      - db
+      - redis
+  result:
+    image: result-app
+    ports:
+      - 5001:80
+    links:
+      - db
